@@ -18,7 +18,7 @@ from plot_and_compute_zdistributions import plot_by_gender_no_kde, plot_and_comp
 ######Variables to specify#############
 n_splits = 100
 show_plots = 0  #set to 1 to show training and test data y vs yhat and spline fit plots. Set to 0 to save to file.
-show_nsubject_plots = 1 #set to 1 to show number of subjects in analysis
+show_nsubject_plots = 0 #set to 1 to show number of subjects in analysis
 spline_order = 1
 spline_knots = 2
 outputdirname = '/home/toddr/neva/PycharmProjects/AdolNormativeModelingCOVID'
