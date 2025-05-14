@@ -121,15 +121,19 @@ makenewdir('{}/predict_files/plots'.format(outputdirname))
 
 # Calculate Zscores for each response variable
 
-Z_time2_behav, behaviors = calculate_normative_model_behav(struct_var, dem_behav_data_v1, dem_behav_data_v2, train_set_array,
+Z_time1_behav, Z_time2_behav, behaviors = calculate_normative_model_behav(struct_var, dem_behav_data_v1, dem_behav_data_v2, train_set_array,
                                                 test_set_array,show_plots, spline_order, spline_knots, outputdirname,
                                                 n_splits)
+
+Z_time1_avg_allsplits = Z_time1_behav.groupby(by=['participant_id']).mean().drop(columns=['split'])
+Z_time1_avg_allsplits.reset_index(inplace=True)
 
 Z_time2_avg_allsplits = Z_time2_behav.groupby(by=['participant_id']).mean().drop(columns=['split'])
 Z_time2_avg_allsplits.reset_index(inplace=True)
 
 plot_and_compute_zcores_by_gender(Z_time2_avg_allsplits, 'behavior', behaviors, outputdirname, n_splits)
 
+Z_time1_avg_allsplits.to_csv(outputdirname+'/Z_scores_all_meltzoff_cogn_behav_visit1.csv')
 Z_time2_avg_allsplits.to_csv(outputdirname+'/Z_scores_all_meltzoff_cogn_behav_visit2.csv')
 
 plt.show()

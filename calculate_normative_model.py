@@ -15,7 +15,7 @@ from sklearn.preprocessing import StandardScaler
 def calculate_normative_model_behav(struct_var, dem_behav_data_v1_orig, dem_behav_data_v2_orig, train_set_array,
      test_set_array, show_plots, spline_order, spline_knots, outputdirname, n_splits):
 
-
+    Z1_all_splits = pd.DataFrame()
     Z2_all_splits = pd.DataFrame()
 
     for split in range(n_splits):
@@ -31,6 +31,11 @@ def calculate_normative_model_behav(struct_var, dem_behav_data_v1_orig, dem_beha
         makenewdir('{}/data/behav_models'.format(outputdirname))
         makenewdir('{}/data/covariate_files'.format(outputdirname))
         makenewdir('{}/data/response_files'.format(outputdirname))
+
+        # Create dataframe to store Zscores
+        Z_time1 = pd.DataFrame()
+        Z_time1['subject'] = dem_behav_data_v1['subject'].copy()
+        Z_time1.reset_index(inplace=True, drop=True)
 
         # create dataframes with subject age and gender to use as features
         feature_cols = ['agedays', 'agegroup', 'gender']
@@ -175,9 +180,9 @@ def calculate_normative_model_behav(struct_var, dem_behav_data_v1_orig, dem_beha
                 Znew = Z_tr.copy()
                 for pos in sorted(train_feature_indexes_with_nans[behav]):
                     Znew = np.insert(Znew, pos, np.nan)
-                Z_time2[behav] = Znew
+                Z_time1[behav] = Znew
             else:
-                Z_time2[behav] = Z_tr
+                Z_time1[behav] = Z_tr
 
             #create dummy design matrices
             dummy_cov_file_path_female, dummy_cov_file_path_male = \
@@ -193,7 +198,9 @@ def calculate_normative_model_behav(struct_var, dem_behav_data_v1_orig, dem_beha
                                     show_plots)
 
         Z_time2['split'] = split
+        Z_time2['split'] = split
 
+        Z1_all_splits = pd.concat([Z1_all_splits, Z_time1], ignore_index=True)
         Z2_all_splits = pd.concat([Z2_all_splits, Z_time2], ignore_index=True)
 
-    return Z2_all_splits, behaviors
+    return Z1_all_splits, Z2_all_splits, behaviors
