@@ -170,6 +170,7 @@ def calculate_normative_model_behav(struct_var, dem_behav_data_v1_orig, dem_beha
                                                         savemodel=True, saveoutput=False,standardize=False)
             Rho_tr=metrics_tr['Rho']
             EV_tr=metrics_tr['EXPV']
+            Z_score_train_matrix[behav] = Z_tr
 
             #create dummy design matrices
             dummy_cov_file_path_female, dummy_cov_file_path_male = \
