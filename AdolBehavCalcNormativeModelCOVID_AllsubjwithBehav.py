@@ -35,8 +35,8 @@ columns_to_keep_meltzoff = ['subject', 'visit', 'gender', 'agemonths', 'agedays'
 #remove structural and social media data
 dem_behav_data = all_data.loc[:, columns_to_keep_meltzoff].copy()
 
-# Write subjects with flanker and dccs data to file
-v1andv2_subjects_behav = dem_behav_data[['subject', 'visit', 'agedays', 'gender', 'FlankerSU', 'DCSU']]
+# Write subjects and nih toolkit scores to file
+v1andv2_subjects_behav = dem_behav_data[['subject', 'visit', 'agedays', 'gender', 'FlankerSU', 'DCSU', 'VocabSU', 'WMemorySU']]
 v1andv2_subjects_behav.to_csv('visit1andvisit2_subjects_behav.csv', index=False)
 
 #replace gender codes 1=male 2=female with binary values (make male=1 and female=0)
