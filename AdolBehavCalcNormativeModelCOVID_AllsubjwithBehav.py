@@ -16,7 +16,7 @@ from plot_and_compute_zdistributions import plot_by_gender_no_kde, plot_and_comp
 
 
 ######Variables to specify#############
-n_splits = 100
+n_splits = 1
 show_plots = 0  #set to 1 to show training and test data y vs yhat and spline fit plots. Set to 0 to save to file.
 show_nsubject_plots = 0 #set to 1 to show number of subjects in analysis
 spline_order = 1
@@ -34,6 +34,10 @@ columns_to_keep_meltzoff = ['subject', 'visit', 'gender', 'agemonths', 'agedays'
 
 #remove structural and social media data
 dem_behav_data = all_data.loc[:, columns_to_keep_meltzoff].copy()
+
+# Write subjects with flanker and dccs data to file
+v1andv2_subjects_behav = dem_behav_data[['subject', 'visit', 'agedays', 'gender', 'FlankerSU', 'DCSU']]
+v1andv2_subjects_behav.to_csv('visit1andvisit2_subjects_behav.csv', index=False)
 
 #replace gender codes 1=male 2=female with binary values (make male=1 and female=0)
 dem_behav_data.loc[dem_behav_data['gender']==2, 'gender'] = 0
