@@ -8,16 +8,16 @@ working_dir = os.getcwd()
 n_splits = 100
 conv_days_to_years = 365.25
 
+behav_score_cols = ['FlankerSU', 'DCSU', 'VocabSU', 'WMemorySU']
+
 all_subjects_filename = f'{working_dir}/visit1andvisit2_subjects_behav.csv'
 all_subjects = pd.read_csv(all_subjects_filename)
 
 nan_columns = all_subjects.columns[all_subjects.isna().any()].tolist()
 
-# Confirm that all subjects missing Flanker are also missing DCCS
-nan_df = all_subjects[all_subjects.isna().any(axis=1)]
-
-all_subjects.dropna(inplace=True)
-all_subjects.drop(columns=['FlankerSU', 'DCSU'], inplace=True)
+# remove all rows that have nan values in all of the behav score cols
+all_subjects.dropna(subset=behav_score_cols, how='all', inplace=True)
+all_subjects.drop(columns=behav_score_cols, inplace=True)
 
 all_subjects['agegroup'] = all_subjects.apply(get_agegroup, axis=1)
 
