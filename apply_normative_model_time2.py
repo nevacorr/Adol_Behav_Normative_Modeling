@@ -6,9 +6,10 @@ import os
 import numpy as np
 from normative_edited import predict
 import matplotlib.pyplot as plt
+import time
 
 def apply_normative_model_time2(dem_behav_data_v2, filepath, struct_var, behaviors, spline_order, spline_knots,
-                                show_plots):
+                                show_plots, splitno, start_time):
 
     ############################  Apply Normative Model to Post-COVID Data ####################
 
@@ -86,7 +87,12 @@ def apply_normative_model_time2(dem_behav_data_v2, filepath, struct_var, behavio
     create_design_matrix('test', agemin, agemax, spline_order, spline_knots, behaviors, predict_files_dir)
 
     for behav in behaviors:
-        print('Running behav:', behav)
+        print(f'Running behav {behav} apply model split {splitno}')
+        end_time = time.time()
+        elapsed_time = (end_time - start_time) / 60.0
+
+        print(f"Elapsed time: {elapsed_time:.4f} minutes")
+
         behav_dir = os.path.join(predict_files_dir, behav)
         model_dir = os.path.join(training_dir, behav, 'Models')
         os.chdir(behav_dir)

@@ -13,10 +13,10 @@ from sklearn.model_selection import StratifiedShuffleSplit
 import os
 import shutil
 from plot_and_compute_zdistributions import plot_by_gender_no_kde, plot_and_compute_zcores_by_gender
-
+from calc_ef_stats import calc_ef_stats
 
 ######Variables to specify#############
-n_splits = 1
+n_splits = 100
 show_plots = 0  #set to 1 to show training and test data y vs yhat and spline fit plots. Set to 0 to save to file.
 show_nsubject_plots = 0 #set to 1 to show number of subjects in analysis
 spline_order = 1
@@ -135,10 +135,12 @@ Z_time1_avg_allsplits.reset_index(inplace=True)
 Z_time2_avg_allsplits = Z_time2_behav.groupby(by=['participant_id']).mean().drop(columns=['split'])
 Z_time2_avg_allsplits.reset_index(inplace=True)
 
+calc_ef_stats(Z_time2_avg_allsplits)
+
 plot_and_compute_zcores_by_gender(Z_time2_avg_allsplits, 'behavior', behaviors, outputdirname, n_splits)
 
-Z_time1_avg_allsplits.to_csv(outputdirname+'/Z_scores_all_meltzoff_cogn_behav_visit1.csv')
-Z_time2_avg_allsplits.to_csv(outputdirname+'/Z_scores_all_meltzoff_cogn_behav_visit2.csv')
+Z_time1_avg_allsplits.to_csv(outputdirname+f'/Z_scores_all_meltzoff_cogn_behav_visit1_{n_splits}_splits.csv')
+Z_time2_avg_allsplits.to_csv(outputdirname+f'/Z_scores_all_meltzoff_cogn_behav_visit2_{n_splits}_splits.csv')
 
 plt.show()
 

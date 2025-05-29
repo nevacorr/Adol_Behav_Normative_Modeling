@@ -11,6 +11,7 @@ from plot_z_scores import plot_and_compute_zcores_by_gender_with_nans
 from apply_normative_model_time2 import apply_normative_model_time2
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import StandardScaler
+import time
 
 def calculate_normative_model_behav(struct_var, dem_behav_data_v1_orig, dem_behav_data_v2_orig, train_set_array,
      test_set_array, show_plots, spline_order, spline_knots, outputdirname, n_splits):
@@ -18,7 +19,11 @@ def calculate_normative_model_behav(struct_var, dem_behav_data_v1_orig, dem_beha
     Z1_all_splits = pd.DataFrame()
     Z2_all_splits = pd.DataFrame()
 
+    start_time = time.time()
+
     for split in range(n_splits):
+
+        print(f'split number = {split+1}/{n_splits}')
 
         subjects_train = train_set_array[split, :]
         subjects_test = test_set_array[split, :]
@@ -156,7 +161,13 @@ def calculate_normative_model_behav(struct_var, dem_behav_data_v1_orig, dem_beha
         # Loop through behavs
 
         for behav in behaviors:
-            print('Running behav:', behav)
+            print(f'Running behav {behav} create model split = {split}')
+
+            end_time = time.time()
+            elapsed_time = (end_time - start_time) / 60.0
+
+            print(f"Elapsed time: {elapsed_time:.4f} minutes")
+
             behav_dir=os.path.join(data_dir, behav)
             model_dir = os.path.join(data_dir, behav, 'Models')
             os.chdir(behav_dir)
@@ -195,7 +206,7 @@ def calculate_normative_model_behav(struct_var, dem_behav_data_v1_orig, dem_beha
             plt.show()
 
         Z_time2 = apply_normative_model_time2(dem_behav_data_v2, outputdirname, struct_var, behaviors, spline_order, spline_knots,
-                                    show_plots)
+                                    show_plots, split, start_time)
 
         Z_time2['split'] = split
         Z_time2['split'] = split
