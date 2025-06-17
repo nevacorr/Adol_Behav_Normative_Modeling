@@ -50,10 +50,12 @@ def calculate_normative_model_behav(struct_var, dem_behav_data_v1_orig, dem_beha
         X_test.reset_index(inplace=True, drop=True)
 
         # create response variables
-        response_columns = ['peermindset', 'persmindset',
-                            'needforapproval', 'needforbelonging', 'CDImean', 'RSQanxiety', 'RSQanger',
-                            'Rejection', 'RejectCoping', 'RejectCopingSad', 'Coping_mad', 'Coping_sad', 'Coping_worried',
-                            'StateAnxiety', 'TraitAnxiety', 'FlankerSU', 'DCSU', 'VocabSU', 'WMemorySU']
+        # response_columns = ['peermindset', 'persmindset',
+        #                     'needforapproval', 'needforbelonging', 'CDImean', 'RSQanxiety', 'RSQanger',
+        #                     'Rejection', 'RejectCoping', 'RejectCopingSad', 'Coping_mad', 'Coping_sad', 'Coping_worried',
+        #                     'StateAnxiety', 'TraitAnxiety', 'FlankerSU', 'DCSU', 'VocabSU', 'WMemorySU']
+
+        response_columns = ['FlankerSU', 'DCSU']
 
         y_train = dem_behav_data_v1[response_columns].copy()
         y_train.reset_index(inplace=True, drop=True)
