@@ -12,6 +12,10 @@ def calc_ef_stats(z_time2, working_dir):
     p_array = np.array([p_value_Flanker, p_value_DCCS])
     reject_val_allsubjs, pvals_corrected_allsubjs, a1_f, a2_f = smt.multipletests(p_array, alpha=0.05, method='fdr_bh')
 
+    print(f"Mean Z-score Flanker: {z_time2['FlankerSU'].mean()} Mean Z-score DCCS: {z_time2['DCSU'].mean()}")
+    print(f"Main effect Flanker p-value: {p_value_Flanker:.3e}, corrected p-value: {pvals_corrected_allsubjs[0]:.3e}, significant: {reject_val_allsubjs[0]}")
+    print(f"Main effect DCSU p-value: {p_value_DCCS:.3e}, corrected p-value: {pvals_corrected_allsubjs[1]:.3e}, significant: {reject_val_allsubjs[1]}")
+
     # Add 'sex' column: 0 if participant_id even, 1 if odd
     z_time2['sex'] = z_time2['participant_id'] % 2
 
@@ -46,11 +50,20 @@ def calc_ef_stats(z_time2, working_dir):
 
         fig, axes = plt.subplots(1, 2, figsize=(12,5), sharex=True)
 
+        fig.subplots_adjust(top=0.85)
+
+        fig.suptitle(f"{measure_name} Male/Female and Combined")
+
+        # Add panel labels ("A", "B") to upper-left of each subplot
+        axes[0].text(-0.05, 1.08, "A", transform=axes[0].transAxes,
+                     fontsize=20, fontweight='normal', va='top', ha='left')
+        axes[1].text(-0.05, 1.08, "B", transform=axes[1].transAxes,
+                     fontsize=20, fontweight='normal', va='top', ha='left')
+
         # plot male vs female
         axes[0].hist(data_female, bins=bins, alpha=1.0, label='female', color='crimson', edgecolor='black')
         axes[0].hist(data_male, bins=bins, alpha=0.7, label='male', color='blue', edgecolor='black')
         axes[0].axvline(x=0, color='k', linestyle='dotted', linewidth=1.5)
-        axes[0].set_title(f"{measure_name}: Male vs. Female")
         axes[0].set_xlabel('Z-score')
         axes[0].set_ylabel('Count')
         handles, labels = axes[0].get_legend_handles_labels()
@@ -59,9 +72,8 @@ def calc_ef_stats(z_time2, working_dir):
         axes[0].legend([handles[idx] for idx in order], [labels[idx] for idx in order], fontsize=10, loc='upper left')
 
         # plot combined
-        axes[1].hist(combined_data, bins=20, alpha=0.5, label='All Subjects', color='gray', edgecolor='black')
+        axes[1].hist(combined_data, bins=bins, alpha=0.5, label='All Subjects', color='gray', edgecolor='black')
         axes[1].axvline(x=0, color='k', linestyle='dotted', linewidth=1.5)
-        axes[1].set_title(f"{measure_name}: All Subjects")
         axes[1].set_xlabel('Z-score')
         axes[1].set_ylabel('Count')
 
